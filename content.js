@@ -1,5 +1,5 @@
 window.addEventListener('load', () => {
-  console.log('Страница загружена, ищу вопрос...');
+  console.log('Страница загружена, начинаю поиск...');
   
   function findAndLogQuestion() {
     const question = document.querySelector('#trainer_question, .trainer_question, [data-id="trainer_question"]');
@@ -11,10 +11,22 @@ window.addEventListener('load', () => {
     return false;
   }
   
+  function findAndLogVariants() {
+    const variants = document.querySelectorAll('.trainer_variant, [data-id="trainer_variants"] a');
+    
+    if (variants.length > 0) {
+      const variantTexts = Array.from(variants).map(v => v.textContent);
+      console.log('🔘 ВАРИАНТЫ ОТВЕТОВ:', variantTexts.join(', '));
+      return true;
+    }
+    return false;
+  }
+  
   if (!findAndLogQuestion()) {
     const observer = new MutationObserver(() => {
       if (findAndLogQuestion()) {
-        observer.disconnect(); 
+        console.log('✅ Вопрос найден!');
+        findAndLogVariants(); 
       }
     });
     
@@ -23,6 +35,10 @@ window.addEventListener('load', () => {
       subtree: true
     });
     
-    console.log('Ожидание появления вопроса...');
+    console.log('⏳ Ожидание появления вопроса...');
   }
+  
+  setTimeout(() => {
+    findAndLogVariants();
+  }, 1000);
 });
