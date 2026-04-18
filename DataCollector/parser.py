@@ -22,3 +22,6 @@ for letter in links.keys():
     response = requests.get(links[letter]).content
     with codecs.open(f"Words/{letter}.html", "wb") as f:
         f.write(response)
+    response = response.decode()
+    words = re.search(r"<div id=\"spelling_search_results\">(.*?)</div>", response, re.DOTALL).group()
+    print(words)
