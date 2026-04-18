@@ -23,5 +23,11 @@ for letter in links.keys():
     with codecs.open(f"Words/{letter}.html", "wb") as f:
         f.write(response)
     response = response.decode()
-    words = re.search(r"<div id=\"spelling_search_results\">(.*?)</div>", response, re.DOTALL).group()
+
+    data = re.search(r"<div id=\"spelling_search_results\">(.*?)</div>", response, re.DOTALL).group().strip()
+
+    words = data.replace("<div id=\"spelling_search_results\">", "").replace("</div>", "").strip()
+
+    #words = words.split("<a class=\"spelling_search_result\" href=\"https://gram.cerm.ru/spelling/\"")
+
     print(words)
