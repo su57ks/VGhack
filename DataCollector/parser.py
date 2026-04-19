@@ -28,6 +28,8 @@ for letter in links.keys():
 
     words = data.replace("<div id=\"spelling_search_results\">", "").replace("</div>", "").strip()
 
-    #words = words.split("<a class=\"spelling_search_result\" href=\"https://gram.cerm.ru/spelling/\"")
+    words = re.findall(r"<a class=\"spelling_search_result\" href=\"https://gram.cerm.ru/spelling/(.*?)\">(.*?)</a>", words)
+
+    words = [word[1] for word in words]
 
     print(words)
