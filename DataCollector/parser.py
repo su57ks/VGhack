@@ -32,4 +32,6 @@ for letter in links.keys():
 
     words = [re.findall(r"(.*?)<span class=\"right\">(.*?)</span>(.*)", word[1]) for word in words]
 
-    print(words)
+    answers = {word[0][0].lower() + word[0][2].lower(): word[0][1].lower() for word in words}
+
+    print(answers)
