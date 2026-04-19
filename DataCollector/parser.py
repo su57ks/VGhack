@@ -1,5 +1,6 @@
 import requests
 import codecs
+import json
 import re
 import os
 
@@ -18,7 +19,10 @@ try:
 except FileExistsError:
     pass 
 
+dictionary = {}
+
 for letter in links.keys():
+    print(f"Processing letter: {letter}")
     response = requests.get(links[letter]).content
     with codecs.open(f"Words/{letter}.html", "wb") as f:
         f.write(response)
@@ -34,4 +38,12 @@ for letter in links.keys():
 
     answers = {word[0][0].lower() + word[0][2].lower(): word[0][1].lower() for word in words}
 
-    print(answers)
+    with codecs.open(f"Words/{letter}.json", "w") as f:
+        json.dump(answers, f)
+    print(f"--Letter: {letter} writed")
+
+    dictionary.update(answers)
+
+with codecs.open("answers.json", "w") as f:
+        json.dump(dictionary, f)
+print("Complete")
