@@ -34,6 +34,7 @@ window.addEventListener('load', () => {
 
           const data = JSON.parse(xhr.responseText);
           console.log("ПРАВИЛЬНЫЙ ОТВЕТ:", data[findAndLogQuestion()]);
+          alert("ПРАВИЛЬНЫЙ ОТВЕТ: " + data[findAndLogQuestion()])
       }
     });
     
