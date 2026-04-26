@@ -1,5 +1,7 @@
 window.addEventListener('load', () => {
   console.log('Страница загружена, начинаю поиск...');
+
+  var last = ""
   
   function findAndLogQuestion() {
     const question = document.querySelector('#trainer_question, .trainer_question, [data-id="trainer_question"]');
@@ -11,36 +13,30 @@ window.addEventListener('load', () => {
     return false;
   }
   
-  function findAndLogVariants() {
-    const variants = document.querySelectorAll('.trainer_variant, [data-id="trainer_variants"] a');
-    
-    if (variants.length > 0) {
-      const variantTexts = Array.from(variants).map(v => v.textContent);
-      console.log('🔘 ВАРИАНТЫ ОТВЕТОВ:', variantTexts.join(', '));
-      return true;
-    }
-    return false;
-  }
-  
   if (!findAndLogQuestion()) {
     const observer = new MutationObserver(() => {
       if (findAndLogQuestion()) {
+        question = findAndLogQuestion()
         console.log('✅ Вопрос найден!');
-        findAndLogVariants(); 
-          const xhr = new XMLHttpRequest();
-          xhr.open('GET', chrome.runtime.getURL('answers.json'), false);
-          xhr.send();
-          console.log(xhr.status)
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', chrome.runtime.getURL('answers.json'), false);
+        xhr.send();
+        console.log(xhr.status)
 
-          const data = JSON.parse(xhr.responseText);
-          console.log("ПРАВИЛЬНЫЙ ОТВЕТ:", data[findAndLogQuestion()]);
-          alert("ПРАВИЛЬНЫЙ ОТВЕТ: " + data[findAndLogQuestion()])
+        const data = JSON.parse(xhr.responseText);
+        console.log("ПРАВИЛЬНЫЙ ОТВЕТ:", data[question]);
+        if (last != question)
+        {
+        alert("ПРАВИЛЬНЫЙ ОТВЕТ: " + data[question])
+        last = question
+        }
       }
     });
     
     observer.observe(document.body, {
       childList: true,
-      subtree: true
+      subtree: true, 
+      attributeFilter: ["trainer_question"]
     });
     
     console.log('⏳ Ожидание появления вопроса...');
