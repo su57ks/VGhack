@@ -6,7 +6,7 @@ window.addEventListener('load', () => {
     
     if (question && question.textContent !== 'Здесь будет вопрос') {
       console.log('📝 ВОПРОС:', question.textContent.trim());
-      return true;
+      return question.textContent.trim();
     }
     return false;
   }
@@ -27,6 +27,13 @@ window.addEventListener('load', () => {
       if (findAndLogQuestion()) {
         console.log('✅ Вопрос найден!');
         findAndLogVariants(); 
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', chrome.runtime.getURL('answers.json'), false);
+          xhr.send();
+          console.log(xhr.status)
+
+          const data = JSON.parse(xhr.responseText);
+          console.log("ПРАВИЛЬНЫЙ ОТВЕТ:", data[findAndLogQuestion()]);
       }
     });
     
